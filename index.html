@@ -105,7 +105,7 @@
             transition: transform 0.1s, border-color 0.1s, background 0.1s;
         }
         .drink-item.selected {
-            border-color: #4caf50; /* 緑色のハイライト枠 */
+            border-color: #4caf50;
             background: rgba(30, 50, 30, 0.9);
             transform: translateY(-3px);
             box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
@@ -175,7 +175,7 @@
         </div>
     </div>
     
-    <div id="controls-info"><strong>【操作方法】</strong><br>上司(👹)の視界の中にあなたの席(🖥️)が入ると不審度が上昇します。<br>上司の視界にいる間、<span class="key">スペースキー</span> または <span class="key">画面長押し</span> で「仕事やってるフリ（タイピング）」をしてください。<br>※お金が貯まると画面右上にドリンクが出現。<span class="key">左右キー</span>で緑色の枠を選択し、<span class="key">エンターキー</span>で飲むことができます。<br>※所持金が780円を超えると、上司は外周を離れて自機に近づいてきます。</div>
+    <div id="controls-info"><strong>【操作方法】</strong><br>上司(👹)の視界の中にあなたの席(🖥️)が入ると不審度が上昇します。<br>上司の視界にいる間、<span class="key">スペースキー</span> または <span class="key">画面長押し</span> で「仕事やってるフリ（タイピング）」をしてください。<br>※お金が貯まると画面右上にドリンクが出現。<span class="key">左右キー</span>で緑色の枠を選択し、<span class="key">エンターキー</span>で飲むことができます。<br>※所持金が1000円を超えると、上司は外周を離れて自機に近づいてきます。</div>
 
     <script>
         let gameActive = false, isGameOver = false, score = 0, suspicion = 0, stamina = 100, willpower = 100, isHolding = false, isExhausted = false, exhaustedTimer = 0, currentTaskProgress = 0, currentTaskName = "";
@@ -367,7 +367,8 @@
         window.addEventListener('touchend', () => { isHolding = false; });
 
         function updateBoss() { 
-            if (score > 780) {
+            // 判定額を780円から1000円に変更
+            if (score > 1000) {
                 const now = performance.now();
                 if (behindMode === null) pickNewBehindMode(now);
 
@@ -510,8 +511,9 @@
             if (distToPlayer < 135) { 
                 if (isHolding && !isExhausted) { 
                     let decreaseRate = 0.1;
-                    if (score > 780) {
-                        let ratio = (score - 780) / (3000 - 780);
+                    // 減少率変化基準額を1500円に変更 (1000円〜3000円の間でスケーリング)
+                    if (score > 1000) {
+                        let ratio = (score - 1000) / (3000 - 1000);
                         if (ratio > 1) ratio = 1;
                         decreaseRate = 0.1 * (1 - ratio);
                     }
@@ -522,8 +524,8 @@
                 } 
             } else { 
                 let decreaseRate = 0.05;
-                if (score > 780) {
-                    let ratio = (score - 780) / (3000 - 780);
+                if (score > 1000) {
+                    let ratio = (score - 1000) / (3000 - 1000);
                     if (ratio > 1) ratio = 1;
                     decreaseRate = 0.05 * (1 - ratio);
                 }
